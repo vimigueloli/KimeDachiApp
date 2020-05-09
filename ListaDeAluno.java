@@ -31,7 +31,6 @@ import javax.swing.event.ListSelectionEvent;
 import java.text.ParseException;
 
 
-
 //classe do tipo tela
 public class ListaDeAluno extends JFrame implements ActionListener, ItemListener, ListSelectionListener{
 
