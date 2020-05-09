@@ -1,9 +1,8 @@
+//imports
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
-
-
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -33,17 +32,11 @@ import java.text.ParseException;
 
 
 
-
-
-
-
-
-
+//classe do tipo tela
 public class ListaDeAluno extends JFrame implements ActionListener, ItemListener, ListSelectionListener{
 
 
-      //variaveis privadas
-      
+      //variaveis privadas 
       private Container painelDeConteudo;     
       private JLabel nomeA= new JLabel("Nome:");
       private JTextField nome= new JTextField("");
@@ -51,102 +44,81 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
       private JTextField presenca= new JTextField("");
       private JTextField nota= new JTextField("");
       private JLabel dataA= new JLabel("data:");
-      private JLabel presencaA= new JLabel("presenÁa:");
+      private JLabel presencaA= new JLabel("presen√ßa:");
       private JLabel notaA= new JLabel("nota:");
       private JButton alterar= new JButton("alterar");
       private JButton voltar= new JButton("voltar");
       private JButton conferir= new JButton("conferir");
       private ImageIcon i= new ImageIcon("C:/Users/casa oliveira/Documents/PI/kimedachi.png");
       private JLabel kimedachi=new JLabel(i);
-      private JComboBox filtro;
       
-      private JScrollPane container;
+      //relacionados a tabela
+      private JScrollPane container;            
+      private JTable tabela;
       private JTable tabela1; 
       private JScrollPane container1;
       private String[][] conteudo;
       private String[][] conteudo1;      
-      
       private String colunas[]= {"nome","RA"};
-      private String colunasA[]= {"nota","data","presenÁa"};
+      private String colunasA[]= {"nota","data","presen√ßa"};
+
+      //relacionados a combo box
+      private JComboBox filtro;
+      private String[] vet;  
+      private String alunos="ECP3BN";
       
-      private String[][] dadosA;
-      private JTable tabela;
-      
-      private String[] vet; 
-      
-      private String alunos="ECP3BN"; 
-      private boolean tela= true;
+      //relacionados ao tamanho da tela
       private int telaW;
       private int telaH;
-
       private int centroW;
       private int centroH;
       
-      private ListSelectionModel listSelectionModel;
-                 
-      
+      //relacionados a interatividade
+      private ListSelectionModel listSelectionModel;  
       private String ra;
       private String n,d,p;
       
-      
-      
-      
 
+      //classe que implementa tudo      
       public ListaDeAluno(){
          
          
-
+         //declara valor ao painel   
          painelDeConteudo= getContentPane(); 
          
+            
+         //tamanho e centro da tela   
          Toolkit tk = Toolkit.getDefaultToolkit();
          Dimension d = tk.getScreenSize();
          telaW= d.width;
          telaH= d.height;
-
          centroW = telaW/2;
          centroH = telaH/2;
          
-      
-         
-                 
-         vet = indicaTurmas();
-         
-                   
 
+         //coloca os itens na combo box        
+         vet = indicaTurmas();   
          filtro = new JComboBox(vet);
-         
+            
+         //seleciona oq ta dentro da combo box
          alunos = (String) filtro.getSelectedItem();
+
          
-         
-         
-         
-         
+         //instancia tabela
          conteudo= indicaAlunos();
          container = criaTabela();
          
-         
-         
-         
-         
-          
-         
 
-         
-         
-         
-
-         
+         //instancia outra tabela   
          conteudo1= tamanhoNotas();
          container1 = criaTabela1();
+
          
-         
-         
-         
-         
+         //painel geral
          painelDeConteudo.setLayout(null); 
          
          
-
+         //posicionamento das coisas   
          filtro.setBounds(centroW-150,centroH-265,300,19);
          kimedachi.setBounds(centroW-50,centroH-375,100,100);
          nomeA.setBounds(centroW-20,centroH-235,40,10);
@@ -159,26 +131,18 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
          nota.setBounds(centroW-150,centroH-100,300,20);
          conferir.setBounds(centroW-150,centroH-60,150,20);
          alterar.setBounds(centroW,centroH-60,150,20);
-         container.setBounds(centroW-310,centroH,300,200);
-         
+         container.setBounds(centroW-310,centroH,300,200); 
          container1.setBounds(centroW+10,centroH,300,200);
          voltar.setBounds(centroW-150,centroH+240,300,20);
          
          
-   
+         //listener nos bot√µes   
          alterar.addActionListener(this);        
          voltar.addActionListener(this);         
          conferir.addActionListener(this);
          
+         //listener da combo box   
          filtro.addItemListener(this);
-         
-        
-         
-         
-      
-         
-         
-         
          
                
          
@@ -198,6 +162,7 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
          painelDeConteudo.add(container);
          painelDeConteudo.add(container1);
          painelDeConteudo.add(voltar);
+            
          
          //arruma tamanho layout e visibilidade do frame
          setSize(telaW,telaH);
@@ -209,45 +174,8 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
       
       
       
-      
-      
-      /*public void actionPerformed(java.awt.event.ActionEvent evt) {
-                System.out.println("tela anterior");
-      }
-      
-      // faz os botıes fazerem algo
-      private void alteraCadastro(){
-          System.out.println("faz oq o bot„o tem que fazer");
-      }
-      public void excluiCadastro(ActionEvent e){
-          System.out.println("faz oq o bot„o tem que fazer");
-      }*/
-      
-      
-      
-        
-      //ativa toda vez que escolhem algo da combo box
-      /*public void itemStateChanged(ItemEvent e){
-      
-         if(e.getStateChange() == ItemEvent.SELECTED){
-            conteudo = carregaDados();
-            //o valor da tabela È atualizado
-            
-            
-            //e agora temos que criar um codigo que muda a tela
-            refazTela();
-            //no final do codigo eu crio esse metodo e explico como funciona
-            
-         }
-       
-      }*/
-      
-      
-      
-      
-      
-      //ent„o aqui temos que criar uma matriz de string 
-      //usando esse metodo grantimos que a tabela vai estar atualizada com o banco
+
+      //metodo gera matriz tabela
       public String[][] indicaAlunos(){
          
          ListaAlunos lista =new ListaAlunos();
@@ -259,9 +187,11 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
          
          return dados;
       
-      }//pode voltar para onde tinhamos parado
+      }
 
-
+      
+      
+      //gera a matriz da segunda tabela
       public String[][] tamanhoNotas(){
          
          ListaNotas lista =new ListaNotas();
@@ -276,11 +206,8 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
       }
    
    
-      // ent„o primeiro de tudo temos que ter em mente que pra isso funcionar ja devem ter sido criados uma JTable,
-      //um vetor com o nome das colunas, e uma matriz de objetos 
-      // a parada desse metodo È q ele vai permitir atualizarmos a tabela
+      // cria uma tabela
       public JScrollPane criaTabela(){
-      
          
          tabela= new JTable(conteudo,colunas);
          tabela.setCellSelectionEnabled(true); 
@@ -288,16 +215,16 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
          listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
          listSelectionModel.addListSelectionListener(this);
          tabela.setSelectionModel(listSelectionModel);
-         //ta.getSelectionModel().addListSelectionListener(this);
-            
-         //a JTable È colocada dentro de um Scrollpane
+
          JScrollPane s = new JScrollPane(tabela);
-         return s;  //pode voltar l· pra onde tinhamos parado
+         return s;  
       }
       
+      
+      
+      //cria outra tabela
       public JScrollPane criaTabela1(){
       
-         //a JTable recebe a matriz objeto e o vetor com o nome das colunas
          tabela1 = new JTable(conteudo1, colunasA);
          
          listSelectionModel = tabela1.getSelectionModel();
@@ -305,20 +232,13 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
          listSelectionModel.addListSelectionListener(this);
          tabela1.setSelectionModel(listSelectionModel);
 
-            
-         //a JTable È colocada dentro de um Scrollpane
+
          JScrollPane s = new JScrollPane(tabela1);
-         return s;  //pode voltar l· pra onde tinhamos parado
+         return s;
       }
 
-   
-   
-   
-      
-      
-      
-      
-      
+
+      //cria array da combo box
       public String[] indicaTurmas(){
       
          ListaTurmas lista =new ListaTurmas();
@@ -334,7 +254,7 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
       
       
       
-      
+      //func√£o dos bot√µes
       public void actionPerformed(ActionEvent c){
          if(c.getSource() == alterar){
             
@@ -376,63 +296,49 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
       
       
       
-      public void valueChanged(ListSelectionEvent eve)
-    {
-      if(eve.getValueIsAdjusting()){
+      
+      //quando a tabela √© selecionada
+      public void valueChanged(ListSelectionEvent eve){
+            if(eve.getValueIsAdjusting()){
          
-            String s = null;  
-            System.out.println("debug:" + tabela );
-            //int[] row = tabela.getSelectedRows();  
-            //int[] columns = tabela.getSelectedColumns();  
-            s = ""+ tabela.getValueAt(tabela.getSelectedRow(),0);
-            ra = ""+ tabela.getValueAt(tabela.getSelectedRow(),1);
-            nome.setText(s);  
+                  String s = null;  
+                  System.out.println("debug:" + tabela );
+
+                  s = ""+ tabela.getValueAt(tabela.getSelectedRow(),0);
+                  ra = ""+ tabela.getValueAt(tabela.getSelectedRow(),1);
+                  nome.setText(s);  
             
+                  n= ""+ tabela1.getValueAt(tabela1.getSelectedRow(),0);
+                  d= ""+ tabela1.getValueAt(tabela1.getSelectedRow(),1);
+                  p= ""+ tabela1.getValueAt(tabela1.getSelectedRow(),2);
             
-            n= ""+ tabela1.getValueAt(tabela1.getSelectedRow(),0);
-            d= ""+ tabela1.getValueAt(tabela1.getSelectedRow(),1);
-            p= ""+ tabela1.getValueAt(tabela1.getSelectedRow(),2);
-            
-            data.setText(d);
-            nota.setText(n);
-            presenca.setText(p);
-                 
-            
+                  data.setText(d);
+                  nota.setText(n);
+                  presenca.setText(p);
+
+            }
       }
-    }
     
 
       
-      
+      //quando muda o item da combo box
       public void itemStateChanged(ItemEvent e){
-         //sempre que muda o id selecionado na combobox este evento e gerado
          if(e.getStateChange() == ItemEvent.SELECTED){
-            //carrega a matriz de pedidos para instanciar a JTable
-            
-            alunos = (String) filtro.getSelectedItem();
-            System.out.println("oi");
           
             alunos = (String) filtro.getSelectedItem();
-            
-
             conteudo= indicaAlunos();
             remove(container);
             container = criaTabela();
-            
             add(container);
-            
-            
             container.setBounds(centroW-310,centroH,300,200);
-            
             repaint();
-            
-            
+              
          }
       }
    
    
 
-   
+   //faz a tela aparecer
    public static void main (String [] args){
       SwingUtilities.invokeLater (new Runnable (){
          public void run (){
@@ -442,11 +348,4 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
    }
    
 
-
-
-   
-   
-   
-   
-   
 }    
