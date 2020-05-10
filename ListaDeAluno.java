@@ -43,7 +43,7 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
       private JTextField presenca= new JTextField("");
       private JTextField nota= new JTextField("");
       private JLabel dataA= new JLabel("data:");
-      private JLabel presencaA= new JLabel("presen√ßa:");
+      private JLabel presencaA= new JLabel("presenÁa:");
       private JLabel notaA= new JLabel("nota:");
       private JButton alterar= new JButton("alterar");
       private JButton voltar= new JButton("voltar");
@@ -59,7 +59,7 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
       private String[][] conteudo;
       private String[][] conteudo1;      
       private String colunas[]= {"nome","RA"};
-      private String colunasA[]= {"nota","data","presen√ßa"};
+      private String colunasA[]= {"nota","data","presenÁa"};
 
       //relacionados a combo box
       private JComboBox filtro;
@@ -81,6 +81,7 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
       //classe que implementa tudo      
       public ListaDeAluno(){
          
+         super("Alunos e notas");
          
          //declara valor ao painel   
          painelDeConteudo= getContentPane(); 
@@ -135,7 +136,7 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
          voltar.setBounds(centroW-150,centroH+240,300,20);
          
          
-         //listener nos bot√µes   
+         //listener nos botıes   
          alterar.addActionListener(this);        
          voltar.addActionListener(this);         
          conferir.addActionListener(this);
@@ -253,7 +254,7 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
       
       
       
-      //func√£o dos bot√µes
+      //func„o dos botıes
       public void actionPerformed(ActionEvent c){
          if(c.getSource() == alterar){
             
@@ -296,12 +297,11 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
       
       
       
-      //quando a tabela √© selecionada
+      //quando a tabela È selecionada
       public void valueChanged(ListSelectionEvent eve){
             if(eve.getValueIsAdjusting()){
          
-                  String s = null;  
-                  System.out.println("debug:" + tabela );
+                  String s = null;
 
                   s = ""+ tabela.getValueAt(tabela.getSelectedRow(),0);
                   ra = ""+ tabela.getValueAt(tabela.getSelectedRow(),1);
@@ -347,4 +347,4 @@ public class ListaDeAluno extends JFrame implements ActionListener, ItemListener
    }
    
 
-}    
+}
