@@ -252,7 +252,7 @@ public class ListaAlunos{
    }
    
    
-   /*public void listarAlunos(String turma,String vet[][]){
+   public void listarAlunosCompleto(String turma,String vet[][]){
       int w=0;  
       try{
       
@@ -261,13 +261,14 @@ public class ListaAlunos{
          x.setString(1, turma);
          resp= x.executeQuery();
          while (resp.next()) {
-            vet[w][1]=resp.getString("matricula_Aluno");
+            vet[w][1]=resp.getString("matricula_Aluno");            
             x1=conn.prepareStatement(stmt6);
             String numero= Integer.toString(resp.getInt("fk_matricula_Pessoa"));
             x1.setString(1,numero);
             resp1=x1.executeQuery();
             while(resp1.next()){
                vet[w][0]=resp1.getString("nome_Pessoa");
+               vet[w][2]=resp1.getString("email_Pessoa");
             }   
             x1.close();
             resp1.close();
@@ -288,8 +289,8 @@ public class ListaAlunos{
             t.printStackTrace();
          }
       }
-   }*/
-   
+   }
+
    
    
       
