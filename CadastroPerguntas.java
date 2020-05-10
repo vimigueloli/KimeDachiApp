@@ -32,33 +32,32 @@ import java.text.ParseException;
 
 
 //classe do tipo tela
-public class CadastroAluno extends JFrame implements ActionListener, ItemListener{
+public class CadastroPerguntas extends JFrame implements ActionListener{
 
 
       //variaveis privadas 
       private Container painelDeConteudo;
-      private JTextField nome= new JTextField("");
-      private JTextField ra= new JTextField("");
-      private JTextField email= new JTextField("");
-      private JLabel nomeA= new JLabel("Nome:");
-      private JLabel raA= new JLabel("RA:");
-      private JLabel emailA= new JLabel("E-mail:");
-      private JLabel turmaA= new JLabel("turma:");
+      private JTextField perguntaT= new JTextField("");
+      private JTextField respostaT= new JTextField("");
+      private JTextField temaT= new JTextField("");
+      private JTextField idT= new JTextField("pergunta em 2 palavras ou menos");
+      private JLabel pergunta= new JLabel("pergunta:");
+      private JLabel resposta= new JLabel("resposta:");
+      private JLabel tema= new JLabel("tema:");
+      private JLabel id= new JLabel("resumo:");
       private JButton adicionar= new JButton("adicionar");
       private JButton voltar= new JButton("voltar");
       private ImageIcon i= new ImageIcon("C:/Users/casa oliveira/Documents/PI/kimedachi.png");
       private JLabel kimedachi=new JLabel(i);
       
       //relacionados a tabela
-      private JScrollPane container;            
+      private JScrollPane container; 
+      private JScrollPane pp;
+      private JScrollPane rr;           
       private JTable tabela;
       private String[][] conteudo;     
-      private String colunas[]= {"nome","RA","email"};
-
-      //relacionados a combo box
-      private JComboBox filtro;
-      private String[] vet;  
-      private String alunos="ECP3BN";
+      private String colunas[]= {"pergunta","tema"};
+      
       
       //relacionados ao tamanho da tela
       private int telaW;
@@ -67,13 +66,13 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
       private int centroH;
       
       //relacionados a interatividade
-      private String n,r,e,t;
+      private String p,r,t,re;
       
 
       //classe que implementa tudo      
-      public CadastroAluno(){
+      public CadastroPerguntas(){
          
-         super("Alunos");
+         super("Perguntas");
          
          //declara valor ao painel   
          painelDeConteudo= getContentPane(); 
@@ -88,38 +87,35 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
          centroH = telaH/2;
          
 
-         //coloca os itens na combo box        
-         vet = indicaTurmas();   
-         filtro = new JComboBox(vet);
-            
-         //seleciona oq ta dentro da combo box
-         alunos = (String) filtro.getSelectedItem();
-
          
          //instancia tabela
-         conteudo= indicaAlunos();
+         conteudo= indicaPerguntas();
          container = criaTabela();
          
 
 
-
-         
          //painel geral
          painelDeConteudo.setLayout(null); 
+         
+         
+         
+         pp = new JScrollPane(perguntaT);
+         rr = new JScrollPane(respostaT);
+
          
          
          //posicionamento das coisas   
          
          kimedachi.setBounds(centroW-50,centroH-375,100,100);
-         nomeA.setBounds(centroW-20,centroH-235,40,10);
-         nome.setBounds(centroW-150,centroH-220,300,20);
-         raA.setBounds(centroW-10,centroH-195,30,12);
-         ra.setBounds(centroW-150,centroH-180,300,20);
-         emailA.setBounds(centroW-20,centroH-155,60,12);
-         email.setBounds(centroW-150,centroH-140,300,20);
-         turmaA.setBounds(centroW-20,centroH-115,60,12);
-         filtro.setBounds(centroW-150,centroH-100,300,19);
-         adicionar.setBounds(centroW-150,centroH-60,300,20);
+         pergunta.setBounds(centroW-33,centroH-235,66,15);
+         pp.setBounds(centroW-300,centroH-220,600,60);
+         resposta.setBounds(centroW-33,centroH-160,66,12);
+         rr.setBounds(centroW-300,centroH-145,600,60);
+         tema.setBounds(centroW+120,centroH-80,60,12);
+         temaT.setBounds(centroW+5,centroH-65,295,19);
+         id.setBounds(centroW-180,centroH-80,60,12);
+         idT.setBounds(centroW-300,centroH-65,295,19);
+         adicionar.setBounds(centroW-150,centroH-35,300,20);
          container.setBounds(centroW-300,centroH,600,200); 
          voltar.setBounds(centroW-150,centroH+240,300,20);
          
@@ -127,22 +123,20 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
          //listener nos botões   
          adicionar.addActionListener(this);        
          voltar.addActionListener(this);         
-         
-         //listener da combo box   
-         filtro.addItemListener(this);
-         
+
+
                
          
          //adiciona as coisas na tela 
          painelDeConteudo.add(kimedachi);
-         painelDeConteudo.add(turmaA);
-         painelDeConteudo.add(filtro);
-         painelDeConteudo.add(nomeA);
-         painelDeConteudo.add(nome);
-         painelDeConteudo.add(raA);
-         painelDeConteudo.add(ra);
-         painelDeConteudo.add(emailA);
-         painelDeConteudo.add(email);
+         painelDeConteudo.add(id);
+         painelDeConteudo.add(idT);
+         painelDeConteudo.add(pergunta);
+         painelDeConteudo.add(pp);
+         painelDeConteudo.add(resposta);
+         painelDeConteudo.add(rr);
+         painelDeConteudo.add(tema);
+         painelDeConteudo.add(temaT);
          painelDeConteudo.add(adicionar);         
          painelDeConteudo.add(container);
          painelDeConteudo.add(voltar);
@@ -160,14 +154,14 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
       
 
       //metodo gera matriz tabela
-      public String[][] indicaAlunos(){
+      public String[][] indicaPerguntas(){
          
-         ListaAlunos lista =new ListaAlunos();
-         int c= lista.contarAlunos(alunos);
+         ListaPerguntas lista =new ListaPerguntas();
+         int c= lista.contarPerguntas();
          
          String[][] dados;
-         dados =  new String [c][3];
-         lista.listarAlunosCompleto(alunos,dados);
+         dados =  new String [c][2];
+         lista.listarPerguntas(dados);
          
          return dados;
       
@@ -186,7 +180,7 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
      
 
 
-      //cria array da combo box
+      /*//cria array da combo box
       public String[] indicaTurmas(){
       
          ListaTurmas lista =new ListaTurmas();
@@ -198,7 +192,7 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
          
          return dados;
       
-      }
+      }*/
       
       
       
@@ -206,29 +200,34 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
       public void actionPerformed(ActionEvent c){
          if(c.getSource() == adicionar){
             
-            t=alunos;
-            n=nome.getText();
-            r=ra.getText();
-            e=email.getText();
+            t=temaT.getText();
+            p=perguntaT.getText();
+            r=respostaT.getText();
+            re=idT.getText();
             
-            Aluno aluno= new Aluno("","","","");
-            aluno.setNomeA(n);
-            aluno.setMatriculaA(r);
-            aluno.setEmailA(e);
-            aluno.setTurmaA(t);
+            Pergunta perg= new Pergunta("","","","");
+            perg.setPergunta(p);
+            perg.setResposta(r);
+            perg.setTema(t);
+            perg.setId(re);
             
-            ListaAlunos adicionando= new ListaAlunos();
-            adicionando.addAluno(aluno);
+            ListaPerguntas adicionando= new ListaPerguntas();
+            adicionando.addPergunta(perg);
             
-            alunos = (String) filtro.getSelectedItem();
-            conteudo= indicaAlunos();
+            
+            
              
             remove(container);
-            conteudo= indicaAlunos();            
+            conteudo= indicaPerguntas();            
             container = criaTabela();           
             add(container);           
             container.setBounds(centroW-300,centroH,600,200);             
-            repaint();  
+            repaint(); 
+            
+            perguntaT.setText("");
+            respostaT.setText("");
+            temaT.setText("");
+            idT.setText("");
             
          }
       }
@@ -240,7 +239,7 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
       
 
       
-      //quando muda o item da combo box
+      /*/quando muda o item da combo box
       public void itemStateChanged(ItemEvent e){
          if(e.getStateChange() == ItemEvent.SELECTED){
           
@@ -253,15 +252,14 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
             repaint();
               
          }
-      }
-   
+      }*/   
    
 
    //faz a tela aparecer
    public static void main (String [] args){
       SwingUtilities.invokeLater (new Runnable (){
          public void run (){
-            new CadastroAluno();
+            new CadastroPerguntas();
          }
       });
    }

@@ -32,7 +32,7 @@ import java.text.ParseException;
 
 
 //classe do tipo tela
-public class CadastroAluno extends JFrame implements ActionListener, ItemListener{
+public class AlterarCadastroAluno extends JFrame implements ActionListener, ItemListener, ListSelectionListener{
 
 
       //variaveis privadas 
@@ -44,7 +44,7 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
       private JLabel raA= new JLabel("RA:");
       private JLabel emailA= new JLabel("E-mail:");
       private JLabel turmaA= new JLabel("turma:");
-      private JButton adicionar= new JButton("adicionar");
+      private JButton alterar= new JButton("alterar");
       private JButton voltar= new JButton("voltar");
       private ImageIcon i= new ImageIcon("C:/Users/casa oliveira/Documents/PI/kimedachi.png");
       private JLabel kimedachi=new JLabel(i);
@@ -67,13 +67,14 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
       private int centroH;
       
       //relacionados a interatividade
-      private String n,r,e,t;
+      private ListSelectionModel listSelectionModel;
+      private String n,r,e,t,nN,rN,eN,tN;
       
 
       //classe que implementa tudo      
-      public CadastroAluno(){
+      public AlterarCadastroAluno(){
          
-         super("Alunos");
+         super("Alterar cadastro -Alunos");
          
          //declara valor ao painel   
          painelDeConteudo= getContentPane(); 
@@ -119,13 +120,13 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
          email.setBounds(centroW-150,centroH-140,300,20);
          turmaA.setBounds(centroW-20,centroH-115,60,12);
          filtro.setBounds(centroW-150,centroH-100,300,19);
-         adicionar.setBounds(centroW-150,centroH-60,300,20);
+         alterar.setBounds(centroW-150,centroH-60,300,20);
          container.setBounds(centroW-300,centroH,600,200); 
          voltar.setBounds(centroW-150,centroH+240,300,20);
          
          
          //listener nos botões   
-         adicionar.addActionListener(this);        
+         alterar.addActionListener(this);       
          voltar.addActionListener(this);         
          
          //listener da combo box   
@@ -143,7 +144,8 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
          painelDeConteudo.add(ra);
          painelDeConteudo.add(emailA);
          painelDeConteudo.add(email);
-         painelDeConteudo.add(adicionar);         
+         painelDeConteudo.add(alterar); 
+         painelDeConteudo.add(alterar);         
          painelDeConteudo.add(container);
          painelDeConteudo.add(voltar);
             
@@ -178,7 +180,11 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
       public JScrollPane criaTabela(){
          
          tabela= new JTable(conteudo,colunas);
- 
+         
+         listSelectionModel = tabela.getSelectionModel();
+         listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+         listSelectionModel.addListSelectionListener(this);
+         tabela.setSelectionModel(listSelectionModel);
 
          JScrollPane s = new JScrollPane(tabela);
          return s;  
@@ -204,40 +210,56 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
       
       //funcão dos botões
       public void actionPerformed(ActionEvent c){
-         if(c.getSource() == adicionar){
+         if(c.getSource() == alterar){
             
-            t=alunos;
-            n=nome.getText();
-            r=ra.getText();
-            e=email.getText();
+            nN=nome.getText();
+            rN=ra.getText();
+            eN=email.getText();
+            tN=alunos;
             
-            Aluno aluno= new Aluno("","","","");
-            aluno.setNomeA(n);
-            aluno.setMatriculaA(r);
-            aluno.setEmailA(e);
-            aluno.setTurmaA(t);
+            Aluno novo=new Aluno("","","","");
+            novo.setNomeA(nN);
+            novo.setMatriculaA(rN);
+            novo.setTurmaA(tN);
+            novo.setEmailA(eN);            
             
-            ListaAlunos adicionando= new ListaAlunos();
-            adicionando.addAluno(aluno);
+            ListaAlunos alterando= new ListaAlunos();
+            alterando.alterarAluno(r,novo);
             
-            alunos = (String) filtro.getSelectedItem();
             conteudo= indicaAlunos();
-             
             remove(container);
-            conteudo= indicaAlunos();            
-            container = criaTabela();           
-            add(container);           
-            container.setBounds(centroW-300,centroH,600,200);             
-            repaint();  
+            container = criaTabela();
+            add(container);
+            container.setBounds(centroW-300,centroH,600,200); 
+            repaint();
+             
+            
+         }else if(c.getSource() == voltar){
             
          }
+         
       }
       
       
       
       
       //quando a tabela é selecionada
-      
+      public void valueChanged(ListSelectionEvent eve){
+            if(eve.getValueIsAdjusting()){
+
+                  n = ""+ tabela.getValueAt(tabela.getSelectedRow(),0);
+                  r = ""+ tabela.getValueAt(tabela.getSelectedRow(),1);
+                  e = ""+ tabela.getValueAt(tabela.getSelectedRow(),2);
+                  t = alunos;
+                  nome.setText(n); 
+                  email.setText(e);
+                  ra.setText(r); 
+            
+
+
+            }
+      }
+    
 
       
       //quando muda o item da combo box
@@ -261,7 +283,7 @@ public class CadastroAluno extends JFrame implements ActionListener, ItemListene
    public static void main (String [] args){
       SwingUtilities.invokeLater (new Runnable (){
          public void run (){
-            new CadastroAluno();
+            new AlterarCadastroAluno();
          }
       });
    }
