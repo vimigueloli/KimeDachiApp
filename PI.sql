@@ -19,7 +19,7 @@ CREATE TABLE Temas(
 
 
 CREATE TABLE Professor(
-	matricula_Professor 	VARCHAR(15) 	PRIMARY KEY			,
+	matricula_Professor 	VARCHAR(15) 	PRIMARY KEY		,
 	senha_Professor		VARCHAR(10) 	NOT NULL 			,
     fk_matricula_Pessoa INT NOT NULL,
 	FOREIGN KEY (fk_matricula_Pessoa) REFERENCES Pessoa (matricula_Pessoa)
@@ -51,6 +51,7 @@ CREATE TABLE Nota(
 	fk_matricula_Aluno 	VARCHAR(15) 	NOT NULL			,
 	
 	FOREIGN KEY (fk_matricula_Aluno) REFERENCES Aluno (matricula_Aluno)	
+    ON UPDATE CASCADE
 	
     /*O prazo nota será um percentual de nota, por exemplo, todas vezes que o aluno foi chamado ele tirou 90%, a nota final
     do aluno(a2_aluno) será a soma do percentual divido pelo numero de vezes que ele foi chamado(numero_Vezes)* 20, ou seja,
@@ -122,6 +123,6 @@ SELECT * FROM Aluno;
 INSERT INTO Temas(id_Tema) VALUE ('matemática');
 
 
+/*on update cascade on delete cascade
 
-
-/*SELECT LAST_INSERT_ID ( );*/
+SELECT LAST_INSERT_ID ( );*/
